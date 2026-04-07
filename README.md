@@ -67,6 +67,7 @@ uniride_django/
 ├── apps/
 ├── config/
 ├── docs/
+├── templates/
 ├── .env.example
 ├── .gitignore
 ├── manage.py
