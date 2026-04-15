@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-tcxj2+&x6-vjl98(vltl-@9fi&sb6w18e=$a*un+thl9%hmagr
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0']
 
 
 # Application definition
@@ -75,10 +75,10 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'uniride_db',
+        'NAME': 'uniride_db',      
         'USER': 'root',
-        'PASSWORD': '',
-        'HOST': '127.0.0.1',
+        'PASSWORD': 'root_password', 
+        'HOST': 'db',              
         'PORT': '3306',
     }
 }
