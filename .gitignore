@@ -1,6 +1,10 @@
-# Python
+# Python y Django
 __pycache__/
 *.pyc
+*.py[cod]
+*$py.class
+db.sqlite3
+db.sqlite3-journal
 
 # Entorno virtual
 venv/
@@ -10,8 +14,9 @@ venv/
 .env.*
 !.env.example
 
-# Base de datos
-db.sqlite3
+# Archivos de usuario
+media/
+/media/
 
 # Archivos del sistema
 .DS_Store
@@ -20,6 +25,20 @@ Thumbs.db
 # IDEs
 .vscode/
 .idea/
+*.swp
 
 # Logs
 *.log
+
+# Docker
+.dockerignore
+
+# Base de Datos (MySQL backups)
+*.sql
+*.dump
+backups/
+
+# Backup files 
+*.bak 
+*.backup
+*~
