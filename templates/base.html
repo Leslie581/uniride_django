@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>UniRide</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+        }
+
+        /* NAVBAR */
+        .navbar {
+            background: #222;
+            color: white;
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .user-info {
+            text-align: right;
+        }
+
+        .badge {
+            background: #007bff;
+            padding: 3px 8px;
+            border-radius: 8px;
+            font-size: 12px;
+            margin-left: 5px;
+        }
+
+        .verified {
+            color: #00ff88;
+            font-weight: bold;
+            margin-left: 5px;
+        }
+
+        /* MENÚ */
+        .menu {
+            display: flex;
+            justify-content: space-around;
+            background: #fff;
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+            flex-wrap: wrap;
+        }
+
+        .menu a {
+            text-decoration: none;
+            color: #333;
+            padding: 8px;
+        }
+
+        .menu a:hover {
+            color: #007bff;
+        }
+
+        /* CONTENIDO */
+        .container {
+            padding: 20px;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 600px) {
+            .menu {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        .card{
+            background:white;
+            padding:15px;
+            border-radius:12px;
+            box-shadow:0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        button{
+            background:#007bff;
+            color:white;
+            padding:10px;
+            border:none;
+            border-radius:8px;
+            cursor:pointer;
+        }
+
+        button:hover{
+            background:#0056b3;
+        }
+
+        a{
+            color:#007bff;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<!-- 🔷 NAVBAR GLOBAL -->
+<div class="navbar">
+    <div class="logo">UniRide 🚗</div>
+
+    <div class="user-info">
+        <div>
+            {{ usuario.nombre }} {{ usuario.apellidos }}
+
+            {% if usuario.verificado_identidad or usuario.verificado_conductor %}
+                <span class="verified">✔</span>
+            {% endif %}
+        </div>
+
+        <div>
+            {{ usuario.cuenta.username }}
+            <span class="badge">{{ rol }}</span>
+        </div>
+    </div>
+</div>
+
+<!-- 🔷 MENÚ DINÁMICO SEGÚN ROL -->
+<div class="menu">
+
+    {% if rol == "Pasajero" %}
+        <a href="{% url 'inicio_pasajero' %}">Inicio</a>
+        <a href="#">Perfil</a>
+        <a href="#">Buscar viaje</a>
+        <a href="#">Mis solicitudes</a>
+        <a href="#">Mis viajes</a>
+        <a href="#">Notificaciones</a>
+    {% endif %}
+
+    {% if rol == "Conductor" %}
+        <a href="{% url 'inicio_conductor' %}">Inicio</a>
+        <a href="#">Perfil</a>
+        <a href="#">Vehículos</a>
+        <a href="#">Rutas</a>
+        <a href="#">Publicar viaje</a>
+        <a href="#">Mis viajes</a>
+        <a href="#">Pagos</a>
+    {% endif %}
+
+    <a href="{% url 'logout' %}">Cerrar sesión</a>
+</div>
+
+<!-- 🔷 CONTENIDO DINÁMICO -->
+<div class="container">
+    {% block content %}
+    {% endblock %}
+</div>
+
+</body>
+</html>
