@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h2>Viajes disponibles</h2>
+
+{% for v in viajes %}
+    <div class="card">
+        <p>{{ v.ruta }}</p>
+        <p>{{ v.fecha }} - {{ v.hora }}</p>
+        <p>${{ v.precio }}</p>
+
+        <a href="{% url 'solicitar_viaje' v.id %}">
+            Solicitar
+        </a>
+    </div>
+{% endfor %}
+
+{% endblock %}
