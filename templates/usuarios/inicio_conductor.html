@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h2>🚗 Panel del Conductor</h2>
+<p>Gestiona todo tu sistema desde aquí</p>
+
+<div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); gap:15px; margin-top:20px;">
+
+    <a href="{% url 'lista_vehiculos' %}" style="text-decoration:none;">
+        <div class="card">
+            🚗<h3>Vehículos</h3>
+            <p>Administra tus autos</p>
+        </div>
+    </a>
+
+    <a href="{% url 'lista_rutas' %}" style="text-decoration:none;">
+        <div class="card">
+            🛣️<h3>Rutas</h3>
+            <p>Define trayectos</p>
+        </div>
+    </a>
+
+    <a href="{% url 'crear_viaje' %}" style="text-decoration:none;">
+        <div class="card">
+            🚀<h3>Publicar viaje</h3>
+            <p>Crea un nuevo viaje</p>
+        </div>
+    </a>
+
+    <a href="{% url 'mis_viajes' %}" style="text-decoration:none;">
+        <div class="card">
+            📍<h3>Mis viajes</h3>
+            <p>Historial y gestión</p>
+        </div>
+    </a>
+
+</div>
+
+<style>
+.card{
+    background:white;
+    padding:20px;
+    border-radius:15px;
+    box-shadow:0 2px 10px rgba(0,0,0,0.1);
+    transition:0.3s;
+    text-align:center;
+    color:#333;
+}
+.card:hover{
+    transform:translateY(-5px);
+    box-shadow:0 5px 20px rgba(0,0,0,0.2);
+}
+</style>
+
+{% endblock %}

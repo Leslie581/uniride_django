@@ -9,7 +9,7 @@ urlpatterns = [
     # path('inicio/', views.inicio, name='inicio'),
 
     # path('inicio/pasajero/', views.inicio_pasajero, name='inicio_pasajero'),
-    # path('inicio/conductor/', views.inicio_conductor, name='inicio_conductor'),
+    path('inicio/conductor/', views.inicio_conductor, name='inicio_conductor'),
 
     # path('perfil/', views.perfil, name='perfil'),
     # path('cambiar-rol/', views.cambiar_rol, name='cambiar_rol'),
