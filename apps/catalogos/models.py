@@ -11,6 +11,7 @@ class Estado(models.Model):
     # ESTADOS CONTROLADOS
     ESTADOS_VIAJE = [
         ('disponible', 'Disponible'),
+        ('lleno', 'Lleno'),
         ('cancelado', 'Cancelado'),
         ('finalizado', 'Finalizado'),
     ]
