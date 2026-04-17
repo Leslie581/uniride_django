@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="card">
+    <h2>Perfil</h2>
+
+    {% if usuario.foto_perfil %}
+        <img src="{{ usuario.foto_perfil.url }}" width="100">
+    {% endif %}
+
+    <p><strong>{{ usuario.nombre }} {{ usuario.apellidos }}</strong></p>
+    <p>{{ usuario.cuenta.username }}</p>
+    <p>{{ usuario.cuenta.correo }}</p>
+    <p>{{ usuario.telefono }}</p>
+    <p>Edad: {{ usuario.edad }}</p>
+
+    <p>Rol actual: {{ rol }}</p>
+
+    <form method="POST" action="{% url 'cambiar_rol' %}">
+        {% csrf_token %}
+        <select name="rol">
+            {% if usuario.es_pasajero %}
+                <option value="pasajero">Pasajero</option>
+            {% endif %}
+            {% if usuario.es_conductor %}
+                <option value="conductor">Conductor</option>
+            {% endif %}
+        </select>
+        <button type="submit">Cambiar rol</button>
+    </form>
+</div>
+{% endblock %}
