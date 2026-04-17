@@ -1,0 +1,57 @@
+{% extends 'base_public.html' %}
+
+{% block content %}
+
+<div style="max-width:500px; margin:auto; background:white; padding:20px; border-radius:10px;">
+
+    <h2 style="text-align:center;">Crear Cuenta</h2>
+
+    {% if messages %}
+        {% for message in messages %}
+            <p style="color:red;">{{ message }}</p>
+        {% endfor %}
+    {% endif %}
+
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <input type="text" name="nombre" placeholder="Nombre" required>
+        <input type="text" name="apellidos" placeholder="Apellidos" required>
+
+        <input type="date" name="fecha_nacimiento" required>
+
+        <input type="text" name="telefono" placeholder="Teléfono" required>
+
+        <hr>
+
+        <input type="text" name="username" placeholder="Usuario" required>
+        <input type="email" name="correo" placeholder="Correo" required>
+
+        <input type="password" name="contrasena" placeholder="Contraseña" required>
+        <input type="password" name="confirmar" placeholder="Confirmar contraseña" required>
+
+        <hr>
+
+        <label>Foto de perfil</label>
+        <input type="file" name="foto_perfil">
+
+        <br><br>
+
+        <label>
+            <input type="checkbox" name="es_pasajero"> Soy pasajero
+        </label>
+
+        <label>
+            <input type="checkbox" name="es_conductor"> Soy conductor
+        </label>
+
+        <br><br>
+
+        <button type="submit" style="width:100%; padding:10px; background:#007bff; color:white;">
+            Registrarse
+        </button>
+    </form>
+
+</div>
+
+{% endblock %}
