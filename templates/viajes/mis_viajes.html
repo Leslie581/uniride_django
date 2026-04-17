@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Mis Viajes</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            background: #f5f6fa;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: auto;
+        }
+
+        h1 {
+            color: #2c3e50;
+        }
+
+        .card {
+            background: white;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 8px 12px;
+            background: #e67e22;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+        }
+
+        .btn:hover {
+            background: #cf711c;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>🧭 Mis Viajes</h1>
+
+    {% for v in viajes %}
+        <div class="card">
+            <h3>{{ v.ruta.origen }} → {{ v.ruta.destino }}</h3>
+            <p><b>Fecha:</b> {{ v.fecha }}</p>
+            <p><b>Hora:</b> {{ v.hora }}</p>
+            <p><b>Precio:</b> ${{ v.precio }}</p>
+            <p><b>Asientos:</b> {{ v.asientos_disponibles }}</p>
+
+            <a class="btn" href="#">Ver detalle</a>
+        </div>
+    {% empty %}
+        <p>No tienes viajes publicados.</p>
+    {% endfor %}
+
+</div>
+
+</body>
+</html>
