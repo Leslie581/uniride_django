@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Mis Vehículos</title>
+    <style>
+        body {
+            font-family: Arial;
+            background: #f5f6fa;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: auto;
+        }
+
+        h1 {
+            color: #2c3e50;
+        }
+
+        .card {
+            background: white;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 15px;
+            background: #27ae60;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .btn:hover {
+            background: #219150;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <h1>🚗 Mis Vehículos</h1>
+
+    <a class="btn" href="{% url 'crear_vehiculo' %}">+ Agregar Vehículo</a>
+
+    {% for v in vehiculos %}
+        <div class="card">
+            <h3>{{ v.marca }} {{ v.modelo }}</h3>
+            <p><b>Año:</b> {{ v.anio }}</p>
+            <p><b>Placas:</b> {{ v.placas }}</p>
+            <p><b>Color:</b> {{ v.color }}</p>
+        </div>
+    {% empty %}
+        <p>No tienes vehículos registrados.</p>
+    {% endfor %}
+
+</div>
+
+</body>
+</html>
