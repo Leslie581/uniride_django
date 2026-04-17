@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h2>➕ Crear Ruta</h2>
+
+<form method="POST" style="display:grid; gap:10px; max-width:400px;">
+    {% csrf_token %}
+
+    <input type="text" name="origen" placeholder="Origen" required>
+    <input type="text" name="destino" placeholder="Destino" required>
+
+    <button type="submit">Guardar</button>
+</form>
+
+{% endblock %}
