@@ -1,70 +1,140 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Mis Viajes</title>
+{% extends 'inicio_base.html' %}
 
-    <style>
-        body {
-            font-family: Arial;
-            background: #f5f6fa;
-            margin: 0;
-            padding: 20px;
-        }
+{% block menu %}
+<style>
+    .trips-container {
+        max-width: 1200px;
+        margin: 40px auto;
+        background: white;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
 
-        .container {
-            max-width: 900px;
-            margin: auto;
-        }
+    .header-section {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+    }
 
-        h1 {
-            color: #2c3e50;
-        }
+    .header-section h2 { margin: 0; font-size: 26px; font-weight: bold; }
 
-        .card {
-            background: white;
-            padding: 15px;
-            margin-bottom: 10px;
-            border-radius: 10px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-        }
+    .btn-history {
+        color: #7b5cff;
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 14px;
+        border: 1px solid #7b5cff;
+        padding: 8px 15px;
+        border-radius: 8px;
+        transition: 0.3s;
+    }
 
-        .btn {
-            display: inline-block;
-            padding: 8px 12px;
-            background: #e67e22;
-            color: white;
-            text-decoration: none;
-            border-radius: 6px;
-        }
+    .btn-history:hover { background: #7b5cff; color: white; }
 
-        .btn:hover {
-            background: #cf711c;
-        }
-    </style>
-</head>
+    table { width: 100%; border-collapse: collapse; text-align: left; }
+    th { padding: 15px; border-bottom: 2px solid #f4f4f4; color: #666; font-size: 13px; text-transform: uppercase; }
+    td { padding: 18px 15px; border-bottom: 1px solid #f8f8f8; vertical-align: middle; }
 
-<body>
+    /* Badges de Estado */
+    .badge {
+        padding: 5px 10px;
+        border-radius: 6px;
+        font-size: 12px;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+    .status-pendiente { background: #fff3cd; color: #856404; } /* Amarillo */
+    .status-disponible { background: #d4edda; color: #155724; } /* Verde */
+    .status-finalizado { background: #e2e3e5; color: #383d41; } /* Gris */
 
-<div class="container">
+    /* Botones de acción compactos */
+    .actions-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        min-width: 220px;
+    }
 
-    <h1>🧭 Mis Viajes</h1>
+    .btn-action {
+        padding: 8px;
+        border-radius: 6px;
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: bold;
+        text-align: center;
+        border: none;
+        cursor: pointer;
+    }
 
-    {% for v in viajes %}
-        <div class="card">
-            <h3>{{ v.ruta.origen }} → {{ v.ruta.destino }}</h3>
-            <p><b>Fecha:</b> {{ v.fecha }}</p>
-            <p><b>Hora:</b> {{ v.hora }}</p>
-            <p><b>Precio:</b> ${{ v.precio }}</p>
-            <p><b>Asientos:</b> {{ v.asientos_disponibles }}</p>
+    .btn-edit { background: #f3f0ff; color: #7b5cff; }
+    .btn-cancel { background: #fee2e2; color: #ef4444; }
+    .btn-finish { background: #e0f2fe; color: #0ea5e9; }
+    .btn-requests { background: #7b5cff; color: white; grid-column: span 2; }
 
-            <a class="btn" href="#">Ver detalle</a>
-        </div>
-    {% empty %}
-        <p>No tienes viajes publicados.</p>
-    {% endfor %}
+    .btn-action:hover { opacity: 0.8; }
 
+    .back-link {
+        display: block;
+        text-align: center;
+        margin-top: 30px;
+        text-decoration: none;
+        color: #666;
+        font-weight: 500;
+    }
+</style>
+
+<div class="trips-container">
+    <div class="header-section">
+        <h2>🚗 Mis viajes</h2>
+        <a href="#" class="btn-history">Ver historial</a>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Ruta</th>
+                <th>Fecha</th>
+                <th>Hora</th>
+                <th>Precio</th>
+                <th>Asientos</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for v in viajes %}
+            <tr>
+                <td><strong>{{ v.ruta.origen }} → {{ v.ruta.destino }}</strong></td>
+                <td>{{ v.fecha_horario_viaje|date:"d/m/Y" }}</td>
+                <td>{{ v.fecha_horario_viaje|time:"H:i" }}</td>
+                <td>${{ v.precio }}</td>
+                <td>{{ v.asientos_disponibles }}</td>
+                <td>
+                    <span class="badge status-{{ v.estado.nombre_estado|lower }}">
+                        {{ v.estado.nombre_estado }}
+                    </span>
+                </td>
+                <td>
+                    <div class="actions-grid">
+                        <a href="#" class="btn-action btn-edit">Editar</a>
+                        <a href="#" class="btn-action btn-cancel">Cancelar</a>
+                        <a href="#" class="btn-action btn-finish">Finalizar</a>
+                        <a href="#" class="btn-action btn-requests">Ver solicitudes</a>
+                    </div>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="7" style="text-align: center; padding: 50px; color: #999;">
+                    No tienes viajes publicados actualmente.
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{% url 'inicio' %}" class="back-link">🏠 Volver al Inicio</a>
 </div>
-
-</body>
-</html>
+{% endblock %}
