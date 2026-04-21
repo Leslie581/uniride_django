@@ -17,7 +17,7 @@ class Vehiculo(models.Model):
 
     activo = models.BooleanField(default=True)
 
-    def _str_(self):
+    def __str__(self):
         return f"{self.marca} {self.modelo} - {self.placas}"
 
 
@@ -33,7 +33,7 @@ class Ruta(models.Model):
 
     activo = models.BooleanField(default=True)
 
-    def _str_(self):
+    def __str__(self):
         return f"{self.nombre} ({self.origen} → {self.destino})"
 
 
@@ -49,7 +49,7 @@ class PuntoIntermedio(models.Model):
 
     orden = models.IntegerField()
 
-    def _str_(self):
+    def __str__(self):
         return f"{self.nombre_lugar} ({self.orden})"
 
     class Meta:
@@ -70,7 +70,7 @@ class Viaje(models.Model):
     asientos_disponibles = models.IntegerField()
     precio = models.DecimalField(max_digits=10, decimal_places=2)
 
-    def _str_(self):
+    def __str__(self):
         return f"{self.ruta} - {self.fecha_horario_viaje}"
 
 
@@ -86,7 +86,7 @@ class Solicitud(models.Model):
 
     punto_encuentro = models.CharField(max_length=150)
 
-    def _str_(self):
+    def __str__(self):
         return f"{self.pasajero} - {self.estado}"
 
     class Meta:
