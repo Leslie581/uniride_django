@@ -1,68 +1,102 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Mis Rutas</title>
+{% extends 'inicio_base.html' %}
 
-    <style>
-        body {
-            font-family: Arial;
-            background: #f5f6fa;
-            margin: 0;
-            padding: 20px;
-        }
+{% block menu %}
+<style>
+    .route-container {
+        max-width: 1100px;
+        margin: 40px auto;
+        background: white;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
 
-        .container {
-            max-width: 900px;
-            margin: auto;
-        }
+    .header-section {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+    }
 
-        h1 {
-            color: #2c3e50;
-        }
+    .header-section h2 { margin: 0; font-size: 26px; font-weight: bold; }
 
-        .card {
-            background: white;
-            padding: 15px;
-            margin-bottom: 10px;
-            border-radius: 10px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-        }
+    .btn-add {
+        background: #7b5cff;
+        color: white;
+        padding: 12px 20px;
+        border-radius: 10px;
+        border: none;
+        cursor: pointer;
+        font-weight: bold;
+        text-decoration: none;
+        display: inline-block;
+    }
 
-        .btn {
-            display: inline-block;
-            padding: 10px 15px;
-            background: #2980b9;
-            color: white;
-            text-decoration: none;
-            border-radius: 8px;
-            margin-bottom: 15px;
-        }
+    table { width: 100%; border-collapse: collapse; text-align: left; }
+    th { padding: 15px; border-bottom: 2px solid #f4f4f4; color: #666; font-size: 13px; text-transform: uppercase; }
+    td { padding: 18px 15px; border-bottom: 1px solid #f8f8f8; vertical-align: middle; }
 
-        .btn:hover {
-            background: #1f5f85;
-        }
-    </style>
-</head>
+    .td-center { text-align: center; }
+    input[type="checkbox"] { width: 18px; height: 18px; accent-color: #7b5cff; }
 
-<body>
+    .actions-cell { display: flex; gap: 10px; }
+    .btn-edit { background: #7b5cff; color: white; padding: 8px 16px; border-radius: 8px; text-decoration: none; font-size: 14px; font-weight: bold; }
+    .btn-delete { background: #ff0000; color: white; padding: 8px 16px; border-radius: 8px; text-decoration: none; font-size: 14px; font-weight: bold; }
+</style>
 
-<div class="container">
+<div class="route-container">
+    <div class="header-section">
+        <h2>Mis rutas</h2>
+        <a href="{% url 'crear_ruta' %}" class="btn-add">+ Agregar ruta</a>
+    </div>
 
-    <h1>🛣️ Mis Rutas</h1>
-
-    <a class="btn" href="{% url 'crear_ruta' %}">+ Agregar Ruta</a>
-
-    {% for r in rutas %}
-        <div class="card">
-            <h3>{{ r.origen }} → {{ r.destino }}</h3>
-            <p><b>Conductor:</b> {{ r.conductor }}</p>
-        </div>
-    {% empty %}
-        <p>No tienes rutas registradas.</p>
-    {% endfor %}
-
+    <table>
+        <thead>
+            <tr>
+                <th class="td-center">Activo</th>
+                <th>Nombre</th>
+                <th>Origen</th>
+                <th>Destino</th>
+                <th>Puntos Intermedios</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for r in rutas %}
+            <tr>
+                <td class="td-center">
+                    <input type="checkbox" {% if r.activo %}checked{% endif %} 
+                        onchange="window.location.href='{% url 'cambiar_estado_ruta' r.id %}'">
+                </td>
+                <td><strong>{{ r.nombre }}</strong></td>
+                <td>{{ r.origen }}</td>
+                <td>{{ r.destino }}</td>
+                <td>
+                    <span style="color: #666;">
+                        {{ r.puntointermedio_set.count }} puntos registrados
+                    </span>
+                </td>
+                <td>
+                    <div class="actions-cell">
+                        <a href="#" class="btn-edit">Editar</a>
+                        <a href="#" class="btn-delete">Eliminar</a>
+                    </div>
+                </td>
+            </tr>
+            
+            {% empty %}
+            <tr>
+                <td colspan="6" style="text-align: center; padding: 40px; color: #999;">
+                    No tienes rutas registradas.
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div style="margin-top: 20px; text-align: center;">
+        <a href="{% url 'inicio' %}" style="text-decoration: none; color: #7b5cff; font-weight: bold;">
+            🏠 Volver al Inicio
+        </a>
+    </div>
 </div>
-
-</body>
-</html>
+{% endblock %}
