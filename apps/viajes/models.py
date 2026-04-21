@@ -1,5 +1,6 @@
 from django.db import models
 from apps.usuarios.models import Usuario
+from apps.catalogos.models import Estado
 
 
 # =====================================
@@ -10,10 +11,9 @@ class Vehiculo(models.Model):
 
     marca = models.CharField(max_length=50)
     modelo = models.CharField(max_length=50)
-    anio = models.IntegerField()
-
+    color = models.CharField(max_length=50)
     placas = models.CharField(max_length=20)
-    color = models.CharField(max_length=30)
+    capacidad = models.IntegerField()
 
     activo = models.BooleanField(default=True)
 
@@ -27,11 +27,14 @@ class Vehiculo(models.Model):
 class Ruta(models.Model):
     conductor = models.ForeignKey(Usuario, on_delete=models.CASCADE)
 
-    origen = models.CharField(max_length=255)
-    destino = models.CharField(max_length=255)
+    nombre = models.CharField(max_length=100)
+    origen = models.CharField(max_length=50)
+    destino = models.CharField(max_length=50)
+
+    activo = models.BooleanField(default=True)
 
     def _str_(self):
-        return f"{self.origen} → {self.destino}"
+        return f"{self.nombre} ({self.origen} → {self.destino})"
 
 
 # =====================================
@@ -40,60 +43,51 @@ class Ruta(models.Model):
 class PuntoIntermedio(models.Model):
     ruta = models.ForeignKey(Ruta, on_delete=models.CASCADE)
 
-    nombre = models.CharField(max_length=255)
+    nombre_lugar = models.CharField(max_length=150)
+    latitud = models.DecimalField(max_digits=10, decimal_places=8)
+    longitud = models.DecimalField(max_digits=11, decimal_places=8)
+
     orden = models.IntegerField()
 
     def _str_(self):
-        return f"{self.nombre} ({self.orden})"
+        return f"{self.nombre_lugar} ({self.orden})"
 
     class Meta:
         ordering = ['orden']
 
 
 # =====================================
-# VIAJE (EL CORE)
+# VIAJE
 # =====================================
 class Viaje(models.Model):
-    conductor = models.ForeignKey(Usuario, on_delete=models.CASCADE)
     vehiculo = models.ForeignKey(Vehiculo, on_delete=models.CASCADE)
     ruta = models.ForeignKey(Ruta, on_delete=models.CASCADE)
+    estado = models.ForeignKey(Estado, on_delete=models.CASCADE)
 
-    fecha = models.DateField()
-    hora = models.TimeField()
+    fecha_horario_viaje = models.DateTimeField()
+    fecha_creacion = models.DateTimeField(auto_now_add=True)
 
     asientos_disponibles = models.IntegerField()
-    precio = models.DecimalField(max_digits=8, decimal_places=2)
-
-    descripcion = models.TextField(blank=True, null=True)
-
-    activo = models.BooleanField(default=True)
-    creado_en = models.DateTimeField(auto_now_add=True)
+    precio = models.DecimalField(max_digits=10, decimal_places=2)
 
     def _str_(self):
-        return f"{self.ruta} - {self.fecha}"
+        return f"{self.ruta} - {self.fecha_horario_viaje}"
 
 
 # =====================================
-# SOLICITUD (RESERVAS)
+# SOLICITUD
 # =====================================
 class Solicitud(models.Model):
-    viaje = models.ForeignKey(Viaje, on_delete=models.CASCADE)
     pasajero = models.ForeignKey(Usuario, on_delete=models.CASCADE)
-
-    estado = models.CharField(
-        max_length=20,
-        choices=[
-            ('pendiente', 'Pendiente'),
-            ('aceptada', 'Aceptada'),
-            ('rechazada', 'Rechazada'),
-        ],
-        default='pendiente'
-    )
+    viaje = models.ForeignKey(Viaje, on_delete=models.CASCADE)
+    estado = models.ForeignKey(Estado, on_delete=models.CASCADE)
 
     fecha_solicitud = models.DateTimeField(auto_now_add=True)
+
+    punto_encuentro = models.CharField(max_length=150)
 
     def _str_(self):
         return f"{self.pasajero} - {self.estado}"
 
     class Meta:
-        unique_together = ('viaje', 'pasajero')
+        unique_together = ('pasajero', 'viaje')
