@@ -13,4 +13,7 @@ urlpatterns = [
     path('viajes/mis/', views.mis_viajes, name='mis_viajes'),
 
     path('viaje/solicitar/<int:viaje_id>/', views.solicitar_viaje, name='solicitar_viaje'),
+
+    path('vehiculos/estado/<int:vehiculo_id>/', views.cambiar_estado_vehiculo, name='cambiar_estado_vehiculo'),
+    path('rutas/estado/<int:ruta_id>/', views.cambiar_estado_ruta, name='cambiar_estado_ruta'),
 ]
