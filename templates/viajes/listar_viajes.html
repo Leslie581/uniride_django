@@ -1,18 +1,200 @@
-{% extends 'base.html' %}
-{% block content %}
+{% extends 'inicio_base.html' %}
+{% block menu %}
 
-<h2>Viajes disponibles</h2>
+<style>
 
-{% for v in viajes %}
-    <div class="card">
-        <p>{{ v.ruta }}</p>
-        <p>{{ v.fecha }} - {{ v.hora }}</p>
-        <p>${{ v.precio }}</p>
+    /* Esto sobreescribe el max-width: 500px y el centrado del base */
+    .container {
+        max-width: 100% !important; 
+        width: 100% !important;
+        margin: 0 !important;
+        text-align: left !important; /* Quitamos el centrado de los botones */
+    }
 
-        <a href="{% url 'solicitar_viaje' v.id %}">
-            Solicitar
-        </a>
+    .menu {
+        width: 95% !important;
+        max-width: 1400px !important;
+        margin: 0 auto !important;
+        display: block !important; /* Quitamos el flex-column que amontona todo */
+    }
+
+    /* 2. ESTRUCTURA DE LA PANTALLA */
+    .passenger-layout {
+        display: flex;
+        gap: 25px;
+        margin-top: 20px;
+        align-items: flex-start;
+    }
+
+    /* SIDEBAR */
+    .filters-sidebar {
+        width: 250px;
+        flex-shrink: 0;
+        background: white;
+        padding: 20px;
+        border-radius: 15px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        border: 1px solid #eee;
+    }
+
+    /* CONTENIDO PRINCIPAL */
+    .main-content {
+        flex-grow: 1;
+    }
+
+    .search-card, .results-card {
+        background: white;
+        padding: 25px;
+        border-radius: 15px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        margin-bottom: 25px;
+        border: 1px solid #eee;
+    }
+
+    /* FORMULARIO */
+    .search-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+    }
+    .full-width { grid-column: span 2; }
+
+    .filter-group label {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 5px;
+        font-size: 14px;
+        color: #444;
+    }
+
+    .input-with-icon { position: relative; }
+    .input-with-icon input {
+        width: 100%;
+        padding: 10px 10px 10px 35px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        box-sizing: border-box;
+    }
+    .icon-map { position: absolute; left: 10px; top: 10px; }
+
+    .btn-search {
+        background: #7b5cff;
+        color: white;
+        border: none;
+        width: 100%;
+        padding: 12px;
+        border-radius: 8px;
+        font-weight: bold;
+        margin-top: 15px;
+        cursor: pointer;
+    }
+
+    /* TABLA */
+    .results-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    .results-table thead { background: #7b5cff; color: white; }
+    .results-table th, .results-table td {
+        padding: 12px;
+        text-align: left;
+        border-bottom: 1px solid #eee;
+    }
+
+    .btn-table-action {
+        padding: 6px 12px;
+        border-radius: 6px;
+        text-decoration: none;
+        font-size: 12px;
+        font-weight: bold;
+        display: inline-block;
+    }
+    .btn-detail { background: #f0edff; color: #7b5cff; margin-bottom: 4px; }
+    .btn-request { background: #7b5cff; color: white; border: none; cursor: pointer; width: 100%; }
+
+</style>
+
+<div class="passenger-layout">
+    
+    <aside class="filters-sidebar">
+        <h3 style="margin-top:0; border-bottom: 2px solid #7b5cff; padding-bottom: 10px;">Filtros</h3>
+        <div class="filter-group">
+            <label>Distancia máxima (m)</label>
+            <input type="number" placeholder="Ej: 200" style="width:100%; padding:8px; border-radius:5px; border:1px solid #ddd;">
+        </div>
+        <p style="font-size: 11px; color: #999; margin-top: 10px;">(Filtro visual por ahora)</p>
+    </aside>
+
+    <div class="main-content">
+        
+        <div class="search-card">
+            <h2 style="margin-top:0">Buscar viaje</h2>
+            <form method="GET">
+                <div class="search-grid">
+                    <div class="filter-group full-width">
+                        <label>Origen</label>
+                        <div class="input-with-icon">
+                            <span class="icon-map">📍</span>
+                            <input type="text" name="origen" placeholder="¿De dónde sales?" value="{{ request.GET.origen }}">
+                        </div>
+                    </div>
+                    <div class="filter-group full-width">
+                        <label>Destino</label>
+                        <div class="input-with-icon">
+                            <span class="icon-map">📍</span>
+                            <input type="text" name="destino" placeholder="¿A dónde vas?" value="{{ request.GET.destino }}">
+                        </div>
+                    </div>
+                    <div class="filter-group">
+                        <label>Fecha</label>
+                        <input type="date" name="fecha" value="{{ request.GET.fecha }}" style="width:100%; padding:8px; border-radius:5px; border:1px solid #ddd;">
+                    </div>
+                    <div class="filter-group">
+                        <label>Hora</label>
+                        <input type="time" name="hora" value="{{ request.GET.hora }}" style="width:100%; padding:8px; border-radius:5px; border:1px solid #ddd;">
+                    </div>
+                </div>
+                <button type="submit" class="btn-search">Buscar Viajes</button>
+            </form>
+        </div>
+
+        <div class="results-card">
+            <h3 style="margin-top:0">Resultados</h3>
+            <table class="results-table">
+                <thead>
+                    <tr>
+                        <th>Conductor</th>
+                        <th>Ruta</th>
+                        <th>Fecha</th>
+                        <th>Hora</th>
+                        <th>Precio</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for v in viajes %}
+                    <tr>
+                        <td><strong>{{ v.vehiculo.conductor.nombre }} {{ v.vehiculo.conductor.apellidos }}</strong></td>
+                        <td>{{ v.ruta.origen }} → {{ v.ruta.destino }}</td>
+                        <td>{{ v.fecha_horario_viaje|date:"d/m/Y" }}</td>
+                        <td>{{ v.fecha_horario_viaje|time:"H:i" }}</td>
+                        <td><span style="color:#27ae60; font-weight:bold;">${{ v.precio }}</span></td>
+                        <td style="width: 150px;">
+                            <a href="#" class="btn-table-action btn-detail">Ver detalle</a>
+                            <form action="{% url 'solicitar_viaje' v.id %}" method="POST">
+                                {% csrf_token %}
+                                <button type="submit" class="btn-table-action btn-request">Solicitar</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr><td colspan="6" style="text-align:center; padding:20px;">No hay viajes disponibles.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
     </div>
-{% endfor %}
+</div>
 
 {% endblock %}
