@@ -1,17 +1,9 @@
-{% extends 'base.html' %}
+{% extends 'inicio_base.html' %}
 
-{% block content %}
+{% block menu %}
 
-<h2>Inicio Pasajero</h2>
-
-<p>Bienvenido al sistema UniRide 🚗</p>
-
-<div class="menu">
-    <div class="card">Perfil</div>
-    <div class="card">Buscar viaje</div>
-    <div class="card">Mis solicitudes</div>
-    <div class="card">Mis viajes</div>
-    <div class="card">Notificaciones</div>
-</div>
+<a href="{% url 'listar_viajes' %}" class="btn">Buscar viaje</a>
+<a href="#" class="btn">Mis solicitudes</a>
+<a href="#" class="btn">Mis viajes</a>
 
 {% endblock %}

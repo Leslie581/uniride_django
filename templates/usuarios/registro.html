@@ -2,56 +2,174 @@
 
 {% block content %}
 
-<div style="max-width:500px; margin:auto; background:white; padding:20px; border-radius:10px;">
+<style>
+.container-form {
+    max-width: 420px;
+    margin: auto;
+    background: white;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0px 4px 15px rgba(0,0,0,0.1);
+}
+
+.form-group {
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    font-size: 14px;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-group input {
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+
+.photo-container {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.photo-container img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 10px;
+    border: 2px solid #ddd;
+}
+
+.roles {
+    margin-top: 10px;
+}
+
+.roles label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.btn {
+    width: 100%;
+    padding: 12px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+}
+
+.btn:hover {
+    background: #0056b3;
+}
+
+.error {
+    color: red;
+    font-size: 14px;
+    text-align: center;
+}
+</style>
+
+
+<div class="container-form">
 
     <h2 style="text-align:center;">Crear Cuenta</h2>
 
     {% if messages %}
         {% for message in messages %}
-            <p style="color:red;">{{ message }}</p>
+            <p class="error">{{ message }}</p>
         {% endfor %}
     {% endif %}
 
     <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
 
-        <input type="text" name="nombre" placeholder="Nombre" required>
-        <input type="text" name="apellidos" placeholder="Apellidos" required>
+        <!-- FOTO -->
+        <div class="photo-container">
+            <img id="preview" src="https://via.placeholder.com/100">
+            <input type="file" name="foto_perfil" accept="image/*" onchange="previewImage(event)" required>
+        </div>
 
-        <input type="date" name="fecha_nacimiento" required>
+        <!-- DATOS PERSONALES -->
+        <div class="form-group">
+            <label>Nombre(s)</label>
+            <input type="text" name="nombre" required>
+        </div>
 
-        <input type="text" name="telefono" placeholder="Teléfono" required>
+        <div class="form-group">
+            <label>Apellidos</label>
+            <input type="text" name="apellidos" required>
+        </div>
 
-        <hr>
+        <div class="form-group">
+            <label>Fecha de nacimiento</label>
+            <input type="date" name="fecha_nacimiento" required>
+        </div>
 
-        <input type="text" name="username" placeholder="Usuario" required>
-        <input type="email" name="correo" placeholder="Correo" required>
+        <div class="form-group">
+            <label>Teléfono</label>
+            <input type="text" name="telefono" required>
+        </div>
 
-        <input type="password" name="contrasena" placeholder="Contraseña" required>
-        <input type="password" name="confirmar" placeholder="Confirmar contraseña" required>
+        <!-- CUENTA -->
+        <div class="form-group">
+            <label>Usuario</label>
+            <input type="text" name="username" required>
+        </div>
 
-        <hr>
+        <div class="form-group">
+            <label>Correo</label>
+            <input type="email" name="correo" required>
+        </div>
 
-        <label>Foto de perfil</label>
-        <input type="file" name="foto_perfil">
+        <div class="form-group">
+            <label>Contraseña</label>
+            <input type="password" name="contrasena" required>
+        </div>
 
-        <br><br>
+        <div class="form-group">
+            <label>Confirmar contraseña</label>
+            <input type="password" name="confirmar" required>
+        </div>
 
-        <label>
-            <input type="checkbox" name="es_pasajero"> Soy pasajero
-        </label>
+        <!-- ROLES -->
+        <div class="roles">
+            <label><input type="checkbox" name="es_pasajero"> Pasajero</label>
+            <label><input type="checkbox" name="es_conductor"> Conductor</label>
+        </div>
 
-        <label>
-            <input type="checkbox" name="es_conductor"> Soy conductor
-        </label>
+        <!-- TERMINOS -->
+        <div style="margin-top:10px;">
+            <label>
+                <input type="checkbox" name="terminos"> Acepto términos y condiciones
+            </label>
+        </div>
 
-        <br><br>
+        <br>
 
-        <button type="submit" style="width:100%; padding:10px; background:#007bff; color:white;">
+        <button type="submit" class="btn">
             Registrarse
         </button>
+
     </form>
 
 </div>
+
+
+<!-- SCRIPT PREVIEW -->
+<script>
+function previewImage(event) {
+    const reader = new FileReader();
+    reader.onload = function(){
+        const output = document.getElementById('preview');
+        output.src = reader.result;
+    }
+    reader.readAsDataURL(event.target.files[0]);
+}
+</script>
 
 {% endblock %}
