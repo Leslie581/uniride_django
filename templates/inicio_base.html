@@ -1,0 +1,124 @@
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <title>UniRide</title>
+
+        <style>
+            body{
+                margin:0;
+                font-family:Arial;
+                background:#f2f2f2;
+            }
+
+            /* HEADER */
+            .header{
+                background:linear-gradient(to right, #6a5cff, #7b5cff);
+                color:white;
+                padding:15px 25px;
+                display:flex;
+                justify-content:space-between;
+                align-items:center;
+            }
+
+            .left{
+                display:flex;
+                flex-direction:column;
+            }
+
+            .logo{
+                font-size:22px;
+                font-weight:bold;
+            }
+
+            .user-info{
+                font-size:13px;
+                opacity:0.9;
+            }
+
+            .nav a{
+                background:white;
+                color:#6a5cff;
+                padding:8px 12px;
+                border-radius:8px;
+                text-decoration:none;
+                margin-left:10px;
+                font-size:14px;
+            }
+
+            /* CONTENIDO */
+            .container{
+                text-align:center;
+                margin-top:50px;
+            }
+
+            /* FOTO */
+            .perfil{
+                margin-bottom:20px;
+            }
+
+            .perfil img{
+                width:120px;
+                height:120px;
+                border-radius:50%;
+                object-fit:cover;
+            }
+
+            /* MENÚ */
+            .menu{
+                display:flex;
+                flex-direction:column;
+                gap:15px;
+                width:250px;
+                margin:0 auto;
+            }
+
+            .btn{
+                background:#6a5cff;
+                color:white;
+                padding:12px;
+                border-radius:10px;
+                text-decoration:none;
+            }
+
+            .btn:hover{
+                background:#5746e6;
+            }
+        </style>
+    </head>
+    <body>
+
+    <!-- HEADER -->
+    <div class="header">
+
+        <!-- IZQUIERDA -->
+        <div class="left">
+            <div class="logo">UniRide</div>
+            <div class="user-info">
+                {{ rol }} | {{ usuario.nombre }} {{ usuario.apellidos }} | @{{ usuario.cuenta.username }}
+            </div>
+        </div>
+
+        <!-- DERECHA -->
+        <div class="nav">
+            <a href="{% url 'inicio' %}">Inicio</a>
+            <a href="#">Notificaciones</a>
+            <a href="{% url 'perfil' %}">Perfil</a>
+            <a href="{% url 'logout' %}">Cerrar sesión</a>
+        </div>
+
+    </div>
+
+    <!-- CONTENIDO -->
+    <div class="container">
+
+        <!-- MENÚ DINÁMICO -->
+        <div class="menu">
+            {% block menu %}
+            {% endblock %}
+        </div>
+
+    </div>
+
+    </body>
+    </html>
