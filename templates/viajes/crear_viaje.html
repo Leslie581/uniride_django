@@ -1,101 +1,146 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Publicar Viaje</title>
+{% extends 'inicio_base.html' %}
 
-    <style>
-        body {
-            font-family: Arial;
-            background: #f5f6fa;
-            margin: 0;
-            padding: 20px;
-        }
+{% block menu %}
+<style>
+    /* Contenedor principal */
+    .publish-container {
+        max-width: 800px;
+        margin: 30px auto;
+        background: white;
+        padding: 40px;
+        border-radius: 15px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        text-align: left;
+    }
 
-        .container {
-            max-width: 600px;
-            margin: auto;
-        }
+    .publish-container h2 {
+        font-size: 28px;
+        margin-bottom: 30px;
+        color: #000;
+        font-weight: bold;
+    }
 
-        h1 {
-            color: #2c3e50;
-        }
+    /* Grupos de formulario */
+    .form-group {
+        margin-bottom: 25px;
+    }
 
-        .card {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-        }
+    .form-row {
+        display: flex;
+        gap: 20px;
+        margin-bottom: 25px;
+    }
 
-        input, select {
-            width: 100%;
-            padding: 10px;
-            margin: 8px 0;
-            border-radius: 6px;
-            border: 1px solid #ccc;
-        }
+    .form-col {
+        flex: 1;
+    }
 
-        .btn {
-            width: 100%;
-            padding: 12px;
-            background: #27ae60;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            margin-top: 10px;
-            cursor: pointer;
-        }
+    label {
+        display: block;
+        font-weight: 500;
+        margin-bottom: 10px;
+        color: #333;
+        font-size: 16px;
+    }
 
-        .btn:hover {
-            background: #219150;
-        }
-    </style>
-</head>
+    input, select {
+        width: 100%;
+        padding: 12px 15px;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        font-size: 15px;
+        color: #555;
+        background-color: #fff;
+        box-sizing: border-box;
+    }
 
-<body>
+    /* Estilo específico para los botones inferiores */
+    .actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 40px;
+    }
 
-<div class="container">
+    .btn-publish {
+        background-color: #7b5cff; /* Morado del header */
+        color: white;
+        padding: 12px 30px;
+        border: none;
+        border-radius: 8px;
+        font-weight: bold;
+        cursor: pointer;
+        font-size: 16px;
+    }
 
-    <h1>🚗 Publicar Viaje</h1>
+    .btn-cancel {
+        background-color: #ff0000; /* Rojo */
+        color: white;
+        padding: 12px 30px;
+        border: none;
+        border-radius: 8px;
+        font-weight: bold;
+        text-decoration: none;
+        font-size: 16px;
+    }
 
-    <div class="card">
+    .btn-publish:hover { background-color: #6a4ce6; }
+    .btn-cancel:hover { background-color: #cc0000; }
 
-        <form method="POST">
-            {% csrf_token %}
+</style>
 
+<div class="publish-container">
+    <h2>Publicar viaje</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <div class="form-group">
             <label>Ruta</label>
-            <select name="ruta">
+            <select name="ruta" required>
+                <option value="" disabled selected>Seleccionar ruta</option>
                 {% for r in rutas %}
                     <option value="{{ r.id }}">{{ r.origen }} → {{ r.destino }}</option>
                 {% endfor %}
             </select>
+        </div>
 
+        <div class="form-row">
+            <div class="form-col">
+                <label>Fecha</label>
+                <input type="date" name="fecha" required>
+            </div>
+            <div class="form-col">
+                <label>Hora</label>
+                <input type="time" name="hora" required>
+            </div>
+        </div>
+
+        <div class="form-group">
             <label>Vehículo</label>
-            <select name="vehiculo">
+            <select name="vehiculo" required>
+                <option value="" disabled selected>Seleccionar vehículo</option>
                 {% for v in vehiculos %}
-                    <option value="{{ v.id }}">{{ v.marca }} {{ v.modelo }}</option>
+                    <option value="{{ v.id }}">{{ v.marca }} {{ v.modelo }} ({{ v.placas }})</option>
                 {% endfor %}
             </select>
+        </div>
 
-            <label>Fecha</label>
-            <input type="date" name="fecha">
+        <div class="form-row">
+            <div class="form-col">
+                <label>Asientos disponibles</label>
+                <input type="number" name="asientos" placeholder="Ej: 3" min="1" required>
+            </div>
+            <div class="form-col">
+                <label>Precio por persona</label>
+                <input type="number" name="precio" step="0.01" placeholder="$" required>
+            </div>
+        </div>
 
-            <label>Hora</label>
-            <input type="time" name="hora">
-
-            <label>Asientos disponibles</label>
-            <input type="number" name="asientos">
-
-            <label>Precio</label>
-            <input type="number" step="0.01" name="precio">
-
-            <button class="btn" type="submit">Publicar Viaje</button>
-        </form>
-
-    </div>
-
+        <div class="actions">
+            <button type="submit" class="btn-publish">Publicar</button>
+            <a href="{% url 'inicio' %}" class="btn-cancel">Cancelar</a>
+        </div>
+    </form>
 </div>
-
-</body>
-</html>
+{% endblock %}
